@@ -7071,8 +7071,7 @@
         }, 1000);
     }
 
-    function initAppleTvFullCardBuiltIn() {
-        if (window.FLIXIO_APPLETV_BUILTIN) return;
+      if (window.FLIXIO_APPLETV_BUILTIN) return;
         window.FLIXIO_APPLETV_BUILTIN = true;
         if (!Lampa.Template || !Lampa.Template.add) return;
 
@@ -7152,7 +7151,7 @@
             render.find('.applecation__description-wrapper').addClass('show');
             render.find('.applecation__info').addClass('show');
             render.find('.full-start-new__rate-line.applecation__ratings').addClass('show');
-        }
+        }  
 
         function loadLogo(render, movie) {
             var logo = render.find('.applecation__logo');
