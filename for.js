@@ -7902,70 +7902,72 @@
 
 })();
 
-
 (function () {
-    var styleId = 'flixio-mega-icons-fix';
-    // Удаляем старую версию стилей, если она была
+    var styleId = 'flixio-bold-icons-fix';
+    // Удаляем предыдущие попытки фикса, если они были
     $('#' + styleId).remove();
 
     $('body').append('<style id="' + styleId + '">\
-        /* Контейнер для всех иконок в карточке */\
+        /* Увеличиваем контейнер иконок */\
         .applecation__quality-badges {\
             display: inline-flex !important;\
             align-items: center !important;\
-            vertical-align: middle !important;\
-            gap: 12px !important; /* Увеличили расстояние между иконками */\
-            margin-left: 12px !important;\
+            gap: 10px !important;\
             height: 2em !important;\
+            vertical-align: middle !important;\
         }\
 \
-        /* Базовый размер (для 7.1, 4K и прочих крупных) */\
+        /* Базовый стиль для всех иконок */\
         .applecation__quality-badge {\
-            height: 1.8em !important; /* Еще больше высота */\
+            height: 1.6em !important; /* Увеличили высоту */\
             width: auto !important;\
-            display: block !important;\
+            display: flex !important;\
+            align-items: center !important;\
         }\
 \
-        /* ЭКСТРА-УВЕЛИЧЕНИЕ для проблемных иконок */\
+        /* ДЕЛАЕМ ИКОНКИ ЖИРНЕЕ И БОЛЬШЕ */\
+        /* Применяем к 5.1, 2.0, HD, FHD */\
         .applecation__quality-badge--5-1, \
         .applecation__quality-badge--2-0, \
         .applecation__quality-badge--hd, \
         .applecation__quality-badge--fhd {\
-            transform: scale(1.55) !important; /* Увеличиваем в полтора раза */\
+            transform: scale(1.5) !important; /* Увеличиваем масштаб */\
             transform-origin: center !important;\
-            margin: 0 5px !important; /* Добавляем "воздуха" по бокам */\
+            margin: 0 6px !important;\
+            /* Эффект жирности: создаем микро-тень вокруг букв */\
+            filter: drop-shadow(0.5px 0 0 white) \
+                    drop-shadow(-0.5px 0 0 white) \
+                    drop-shadow(0 0.5px 0 white) \
+                    drop-shadow(0 -0.5px 0 white) !important;\
         }\
 \
-        /* Чтобы SVG не обрезались при увеличении */\
-        .applecation__quality-badge svg {\
-            height: 100% !important;\
-            width: auto !important;\
-            overflow: visible !important;\
+        /* Дополнительная жирность для очень тонких HD/FHD */\
+        .applecation__quality-badge--hd, \
+        .applecation__quality-badge--fhd {\
+            filter: drop-shadow(0.8px 0 0 white) \
+                    drop-shadow(-0.8px 0 0 white) \
+                    drop-shadow(0 0.8px 0 white) \
+                    drop-shadow(0 -0.8px 0 white) !important;\
         }\
 \
-        /* Исправляем цвет (делаем ярче) */\
+        /* Гарантируем белый цвет и четкость */\
         .applecation__quality-badge svg path {\
-            fill: #ffffff !important;\
-            fill-opacity: 1 !important;\
+            fill: #fff !important;\
+            stroke: #fff !important;\
+            stroke-width: 0.5px !important; /* Физическое утолщение линий */\
         }\
 \
-        /* Поправка для строки текста рядом с иконками */\
-        .applecation__info {\
-            font-size: 1.1em !important;\
-            line-height: 2 !important;\
-            display: flex !important;\
-            align-items: center !important;\
-            flex-wrap: wrap !important;\
+        .applecation__quality-badge svg {\
+            overflow: visible !important;\
+            height: 100% !important;\
         }\
     </style>');
 
-    // Функция форсированного обновления (на случай если Lampa перетирает стили)
-    function applyMegaSize() {
-        var badges = $('.applecation__quality-badge--5-1, .applecation__quality-badge--2-0, .applecation__quality-badge--hd, .applecation__quality-badge--fhd');
-        if (badges.length) {
-            badges.css('display', 'inline-block');
-        }
+    // Функция форсированного обновления на случай перерисовки Lampa
+    function enforceBoldness() {
+        $('.applecation__quality-badge--5-1, .applecation__quality-badge--2-0, .applecation__quality-badge--hd, .applecation__quality-badge--fhd')
+            .css('display', 'inline-flex');
     }
 
-    setInterval(applyMegaSize, 1000);
+    setInterval(enforceBoldness, 1000);
 })();
