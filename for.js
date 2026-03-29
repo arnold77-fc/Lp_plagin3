@@ -7901,3 +7901,58 @@
     }
 
 })();
+(function () {
+    // Создаем уникальный ID для стилей, чтобы не дублировать их
+    var styleId = 'flixio-quality-badge-fix';
+    if (!$('#' + styleId).length) {
+        $('body').append('<style id="' + styleId + '">\
+            /* Контейнер для иконок в инфо-панели */\
+            .applecation__quality-badges {\
+                display: inline-flex !important;\
+                align-items: center !important;\
+                gap: 6px !important;\
+                vertical-align: middle !important;\
+                margin-left: 10px !important;\
+            }\
+            \
+            /* Базовый размер для всех бейджей (ориентируемся на 7.1) */\
+            .applecation__quality-badge {\
+                height: 1.4em !important;\
+                width: auto !important;\
+                display: inline-block !important;\
+                vertical-align: middle !important;\
+            }\
+            \
+            /* Увеличение конкретно маленьких иконок звука и разрешения */\
+            .applecation__quality-badge--5-1, \
+            .applecation__quality-badge--2-0, \
+            .applecation__quality-badge--hd, \
+            .applecation__quality-badge--fhd {\
+                transform: scale(1.3) !important; /* Увеличиваем на 30% */\
+                transform-origin: center !important;\
+                margin: 0 3px !important;\
+            }\
+            \
+            /* Принудительный цвет для видимости (белый) */\
+            .applecation__quality-badge svg path {\
+                fill: #fff !important;\
+            }\
+            \
+            /* Убираем лишние отступы у SVG внутри */\
+            .applecation__quality-badge svg {\
+                height: 100% !important;\
+                width: auto !important;\
+                display: block !important;\
+            }\
+        </style>');
+    }
+
+    // Функция для периодической проверки (на случай динамической подгрузки данных Лампой)
+    function fixBadgesSize() {
+        $('.applecation__quality-badge--5-1, .applecation__quality-badge--2-0, .applecation__quality-badge--hd, .applecation__quality-badge--fhd')
+            .addClass('size-fixed');
+    }
+
+    // Запускаем проверку при загрузке и при изменениях в DOM
+    setInterval(fixBadgesSize, 1000);
+})();
