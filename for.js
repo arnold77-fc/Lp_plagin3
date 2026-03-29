@@ -7901,58 +7901,70 @@
     }
 
 })();
-(function () {
-    // Создаем уникальный ID для стилей, чтобы не дублировать их
-    var styleId = 'flixio-quality-badge-fix';
+(function() {
+    // 1. Создаем блок стилей для принудительного изменения размеров
+    var styleId = 'flixio-icons-unification';
     if (!$('#' + styleId).length) {
         $('body').append('<style id="' + styleId + '">\
-            /* Контейнер для иконок в инфо-панели */\
+            /* Общий контейнер для всех иконок качества */\
             .applecation__quality-badges {\
                 display: inline-flex !important;\
                 align-items: center !important;\
-                gap: 6px !important;\
+                gap: 8px !important;\
                 vertical-align: middle !important;\
-                margin-left: 10px !important;\
+                height: 1.6em !important;\
             }\
             \
-            /* Базовый размер для всех бейджей (ориентируемся на 7.1) */\
+            /* Базовый размер для каждой иконки (как у 7.1) */\
             .applecation__quality-badge {\
-                height: 1.4em !important;\
+                height: 1.4em !important; /* Устанавливаем высоту как у 7.1 */\
                 width: auto !important;\
-                display: inline-block !important;\
-                vertical-align: middle !important;\
+                display: flex !important;\
+                align-items: center !important;\
+                padding: 0 !important; /* Убираем внутренние отступы */\
+                margin: 0 !important;\
             }\
             \
-            /* Увеличение конкретно маленьких иконок звука и разрешения */\
+            /* Исправление для конкретных "маленьких" иконок */\
             .applecation__quality-badge--5-1, \
             .applecation__quality-badge--2-0, \
             .applecation__quality-badge--hd, \
             .applecation__quality-badge--fhd {\
-                transform: scale(1.3) !important; /* Увеличиваем на 30% */\
+                transform: scale(1.3) !important; /* Увеличиваем масштаб на 30% */\
                 transform-origin: center !important;\
-                margin: 0 3px !important;\
             }\
             \
-            /* Принудительный цвет для видимости (белый) */\
-            .applecation__quality-badge svg path {\
-                fill: #fff !important;\
-            }\
-            \
-            /* Убираем лишние отступы у SVG внутри */\
+            /* Гарантируем, что SVG внутри занимает всю высоту */\
             .applecation__quality-badge svg {\
                 height: 100% !important;\
                 width: auto !important;\
-                display: block !important;\
+                max-height: 1.4em !important;\
+            }\
+            \
+            /* Убираем лишние рамки, если они мешают размеру */\
+            .applecation__quality-badge {\
+                border: none !important;\
+                background: none !important;\
             }\
         </style>');
     }
 
-    // Функция для периодической проверки (на случай динамической подгрузки данных Лампой)
-    function fixBadgesSize() {
-        $('.applecation__quality-badge--5-1, .applecation__quality-badge--2-0, .applecation__quality-badge--hd, .applecation__quality-badge--fhd')
-            .addClass('size-fixed');
+    // 2. Функция для "лечения" уже отрисованных иконок
+    function rescaleBadges() {
+        $('.applecation__quality-badge').each(function() {
+            var $this = $(this);
+            // Если это текстовая иконка (не SVG), подтянем шрифт
+            if ($this.text().length > 0) {
+                $this.css({
+                    'font-size': '1.2em',
+                    'font-weight': 'bold',
+                    'line-height': '1'
+                });
+            }
+        });
     }
 
-    // Запускаем проверку при загрузке и при изменениях в DOM
-    setInterval(fixBadgesSize, 1000);
+    // Запускаем проверку каждые 2 секунды, так как Lampa перерисовывает карточки
+    setInterval(rescaleBadges, 2000);
 })();
+
