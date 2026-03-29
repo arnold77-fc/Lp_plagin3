@@ -7874,15 +7874,61 @@
         });
     }
 
-    function runInit() {
+        function runInit() {
         try {
+            // Внедряем стили для жирных и крупных иконок
+            var styleId = 'flixio-bold-icons-fix';
+            $('#' + styleId).remove();
+            $('body').append('<style id="' + styleId + '">\
+                .applecation__quality-badges {\
+                    display: inline-flex !important;\
+                    align-items: center !important;\
+                    gap: 12px !important;\
+                    height: 2.2em !important;\
+                    vertical-align: middle !important;\
+                }\
+                .applecation__quality-badge {\
+                    height: 1.8em !important;\
+                    width: auto !important;\
+                    display: flex !important;\
+                    align-items: center !important;\
+                }\
+                /* Увеличение и жирность для 5.1, 2.0, HD, FHD */\
+                .applecation__quality-badge--5-1, \
+                .applecation__quality-badge--2-0, \
+                .applecation__quality-badge--hd, \
+                .applecation__quality-badge--fhd {\
+                    transform: scale(1.6) !important; \
+                    transform-origin: center !important;\
+                    margin: 0 5px !important;\
+                    filter: drop-shadow(0.7px 0 0 white) drop-shadow(-0.7px 0 0 white) drop-shadow(0 0.7px 0 white) !important;\
+                }\
+                .applecation__quality-badge svg path {\
+                    fill: #fff !important;\
+                    stroke: #fff !important;\
+                    stroke-width: 0.8px !important; /* Делаем линии толще */\
+                }\
+                .applecation__quality-badge svg {\
+                    overflow: visible !important;\
+                    height: 100% !important;\
+                }\
+            </style>');
+
             initAppleTvFullCardBuiltIn();
             initAppleTvFullCardLogoRuntime();
             initAppleTvFullCardInfoRuntime();
             initMaxsmRatingsIntegration();
             initMarksJacRed();
             init();
+            
             window.FLIXIO_STUDIOS_LOADED = true;
+
+            // Цикл для поддержания отображения при переходах
+            setInterval(function() {
+                $('.applecation__quality-badge--5-1, .applecation__quality-badge--2-0, .applecation__quality-badge--hd, .applecation__quality-badge--fhd')
+                    .css('display', 'inline-flex');
+            }, 1000);
+
         } catch (err) {
             window.FLIXIO_STUDIOS_ERROR = (err && err.message) ? err.message : String(err);
             if (typeof console !== 'undefined' && console.error) {
@@ -7899,74 +7945,4 @@
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-    
-})();
-(function () {
-    var styleId = 'flixio-bold-icons-fix';
-    // Удаляем предыдущие попытки фикса, если они были
-    $('#' + styleId).remove();
-
-    $('body').append('<style id="' + styleId + '">\
-        /* Увеличиваем контейнер иконок */\
-        .applecation__quality-badges {\
-            display: inline-flex !important;\
-            align-items: center !important;\
-            gap: 10px !important;\
-            height: 2em !important;\
-            vertical-align: middle !important;\
-        }\
-\
-        /* Базовый стиль для всех иконок */\
-        .applecation__quality-badge {\
-            height: 1.6em !important; /* Увеличили высоту */\
-            width: auto !important;\
-            display: flex !important;\
-            align-items: center !important;\
-        }\
-\
-        /* ДЕЛАЕМ ИКОНКИ ЖИРНЕЕ И БОЛЬШЕ */\
-        /* Применяем к 5.1, 2.0, HD, FHD */\
-        .applecation__quality-badge--5-1, \
-        .applecation__quality-badge--2-0, \
-        .applecation__quality-badge--hd, \
-        .applecation__quality-badge--fhd {\
-            transform: scale(1.5) !important; /* Увеличиваем масштаб */\
-            transform-origin: center !important;\
-            margin: 0 6px !important;\
-            /* Эффект жирности: создаем микро-тень вокруг букв */\
-            filter: drop-shadow(0.5px 0 0 white) \
-                    drop-shadow(-0.5px 0 0 white) \
-                    drop-shadow(0 0.5px 0 white) \
-                    drop-shadow(0 -0.5px 0 white) !important;\
-        }\
-\
-        /* Дополнительная жирность для очень тонких HD/FHD */\
-        .applecation__quality-badge--hd, \
-        .applecation__quality-badge--fhd {\
-            filter: drop-shadow(0.8px 0 0 white) \
-                    drop-shadow(-0.8px 0 0 white) \
-                    drop-shadow(0 0.8px 0 white) \
-                    drop-shadow(0 -0.8px 0 white) !important;\
-        }\
-\
-        /* Гарантируем белый цвет и четкость */\
-        .applecation__quality-badge svg path {\
-            fill: #fff !important;\
-            stroke: #fff !important;\
-            stroke-width: 0.5px !important; /* Физическое утолщение линий */\
-        }\
-\
-        .applecation__quality-badge svg {\
-            overflow: visible !important;\
-            height: 100% !important;\
-        }\
-    </style>');
-
-    // Функция форсированного обновления на случай перерисовки Lampa
-    function enforceBoldness() {
-        $('.applecation__quality-badge--5-1, .applecation__quality-badge--2-0, .applecation__quality-badge--hd, .applecation__quality-badge--fhd')
-            .css('display', 'inline-flex');
-    }
-
-    setInterval(enforceBoldness, 1000);
-})();
+})(); // Замыкание всего файла
