@@ -7891,13 +7891,47 @@
         }
     }
 
-    if (window.appready) runInit();
-    else if (typeof Lampa !== 'undefined' && Lampa.Listener && Lampa.Listener.follow) {
+(function() {
+    // 1. Добавляем стили немедленно
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .card__badge--quality, 
+        .card__badge--custom, 
+        .applecation__quality-badges span,
+        .quality-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 900 !important;
+            font-size: 14px !important;
+            min-width: 45px !important;
+            height: 22px !important;
+            padding: 0 5px !important;
+            background: rgba(51, 153, 153, 1) !important;
+            border: 1.5px solid #fff !important;
+            border-radius: 4px !important;
+            color: #fff !important;
+            margin: 2px !important;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // 2. Логика запуска (Инициализация)
+    function startPlugin() {
+        if (typeof runInit === 'function') {
+            runInit();
+        } else {
+            console.warn('Lampa Plugin: runInit is not defined');
+        }
+    }
+
+    if (window.appready) {
+        startPlugin();
+    } else if (typeof Lampa !== 'undefined' && Lampa.Listener) {
         Lampa.Listener.follow('app', function (e) {
-            if (e.type === 'ready') runInit();
+            if (e.type === 'ready') startPlugin();
         });
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-
 })();
