@@ -7903,5 +7903,28 @@ function forceQualityBadgeStyles() {
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-
+(function() {
+    var style = document.createElement('style');
+    style.innerHTML = `
+        /* Все иконки (2.0, 5.1, HD, FHD) делаем как 7.1 */
+        .card__badge--quality, 
+        .card__badge--custom, 
+        .applecation__quality-badges span,
+        .quality-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 900 !important;      /* Максимально жирный шрифт */
+            font-size: 14px !important;       /* Крупный размер */
+            min-width: 45px !important;       /* Растягиваем, чтобы не было пустоты внутри */
+            height: 22px !important;          /* Делаем их высокими */
+            padding: 0 5px !important;
+            background: rgba(51, 153, 153, 1) !important; /* Цвет как у активных иконок */
+            border: 1.5px solid #fff !important;         /* Белая жирная рамка */
+            border-radius: 4px !important;
+            color: #fff !important;
+            margin: 2px !important;
+        }
+    `;
+    document.head.appendChild(style);
 })();
