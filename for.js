@@ -7109,42 +7109,43 @@
         }
     }
 
-    function initAppleTvFullCardLogoRuntime() {
-        // Новые иконки 24x24 в стиле 7.1 (с рамкой и одинаковой толщиной линий)
-        var icon_51 = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 13C7 14 8 15 9.5 15C11 15 11 14 11 13.5C11 13 10.5 12.5 9.5 12.5H8.5V9.5H11M14 9V14C14 14.5 14.5 15 15 15C15.5 15 16 14.5 16 14V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12.5" cy="14" r="0.5" fill="currentColor"/></svg>';
-        
-        var icon_20 = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 11C7 10 8 9 9 9C10 9 11 10 11 11C11 12 10 13 9 14H11M14 9V14C14 14.5 14.5 15 15 15C15.5 15 16 14.5 16 14V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12.5" cy="14" r="0.5" fill="currentColor"/></svg>';
-        
-        var icon_hd = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 9V15M11 9V15M7 12H11M14 9V15C14 15 17 15 17 12C17 9 14 9 14 9Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        
-        var icon_fhd = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="1" y="5" width="22" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4 9V15M7 9V15M4 12H7M10 9V15C10 15 13 15 13 12C13 9 10 9 10 9ZM16 9V15H18.5C18.5 15 20 15 20 12C20 9 18.5 9 18.5 9H16Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-        var icon_4k = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 12L9 9V15M9 12H10.5M13 9V13H17V9M17 13V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-        // Оригинальная иконка 7.1 для примера, чтобы остальные были такими же
+     function initAppleTvFullCardLogoRuntime() {
+        // Обновленные иконки 24x24 в стиле 7.1
         var icon_71 = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 9L11 9L11 10L9 15M14 9V14C14 14.5 14.5 15 15 15C15.5 15 16 14.5 16 14V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12.5" cy="14" r="0.5" fill="currentColor"/></svg>';
+        var icon_51 = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 13C7 14 8 15 9.5 15C11 15 11 14 11 13.5C11 13 10.5 12.5 9.5 12.5H8.5V9.5H11M14 9V14C14 14.5 14.5 15 15 15C15.5 15 16 14.5 16 14V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12.5" cy="14" r="0.5" fill="currentColor"/></svg>';
+        var icon_20 = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 11C7 10 8 9 9 9C10 9 11 10 11 11C11 12 10 13 9 14H11M14 9V14C14 14.5 14.5 15 15 15C15.5 15 16 14.5 16 14V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12.5" cy="14" r="0.5" fill="currentColor"/></svg>';
+        var icon_hd = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 9V15M11 9V15M7 12H11M14 9V15C14 15 17 15 17 12C17 9 14 9 14 9Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        var icon_fhd = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="1" y="5" width="22" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4 9V15M7 9V15M4 12H7M10 9V15C10 15 13 15 13 12C13 9 10 9 10 9ZM16 9V15H18.5C18.5 15 20 15 20 12C20 9 18.5 9 18.5 9H16Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        var icon_4k = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 12L9 9V15M9 12H10.5M13 9V13H17V9M17 13V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
         Lampa.Listener.follow('full', function (e) {
             if (e.type === 'complite') {
                 var render = e.object.render;
                 var container = render.find('.applecation__quality-badges');
-                if (!container.length) return;
+                if (!container.length) {
+                    var meta = render.find('.applecation__meta');
+                    if (meta.length) {
+                        container = $('<div class="applecation__quality-badges" style="display: flex; align-items: center; margin-top: 10px;"></div>');
+                        meta.after(container);
+                    }
+                }
 
-                getQualityLabels(e.data.movie, e.object, function(acc) {
-                    container.empty();
-                    if (acc.resolutions.has('4K')) container.append(icon_4k);
-                    else if (acc.resolutions.has('2K') || acc.resolutions.has('FULL HD')) container.append(icon_fhd);
-                    else if (acc.resolutions.has('HD')) container.append(icon_hd);
+                if (container.length) {
+                    getQualityLabels(e.data.movie, e.object, function(acc) {
+                        container.empty();
+                        if (acc.resolutions.has('4K')) container.append(icon_4k);
+                        else if (acc.resolutions.has('2K') || acc.resolutions.has('FULL HD')) container.append(icon_fhd);
+                        else if (acc.resolutions.has('HD')) container.append(icon_hd);
 
-                    if (acc.audio.has('7.1')) container.append(icon_71);
-                    else if (acc.audio.has('5.1')) container.append(icon_51);
-                    else if (acc.audio.has('2.0')) container.append(icon_20);
-                });
+                        if (acc.audio.has('7.1')) container.append(icon_71);
+                        else if (acc.audio.has('5.1')) container.append(icon_51);
+                        else if (acc.audio.has('2.0')) container.append(icon_20);
+                    });
+                }
             }
         });
     }
-    
-
+   
         function finalize(render) {
             render.find('.applecation__meta').addClass('show');
             render.find('.applecation__studios').addClass('show');
