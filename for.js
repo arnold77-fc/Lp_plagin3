@@ -7901,70 +7901,71 @@
     }
 
 })();
-(function() {
-    // 1. Создаем блок стилей для принудительного изменения размеров
-    var styleId = 'flixio-icons-unification';
-    if (!$('#' + styleId).length) {
-        $('body').append('<style id="' + styleId + '">\
-            /* Общий контейнер для всех иконок качества */\
-            .applecation__quality-badges {\
-                display: inline-flex !important;\
-                align-items: center !important;\
-                gap: 8px !important;\
-                vertical-align: middle !important;\
-                height: 1.6em !important;\
-            }\
-            \
-            /* Базовый размер для каждой иконки (как у 7.1) */\
-            .applecation__quality-badge {\
-                height: 1.4em !important; /* Устанавливаем высоту как у 7.1 */\
-                width: auto !important;\
-                display: flex !important;\
-                align-items: center !important;\
-                padding: 0 !important; /* Убираем внутренние отступы */\
-                margin: 0 !important;\
-            }\
-            \
-            /* Исправление для конкретных "маленьких" иконок */\
-            .applecation__quality-badge--5-1, \
-            .applecation__quality-badge--2-0, \
-            .applecation__quality-badge--hd, \
-            .applecation__quality-badge--fhd {\
-                transform: scale(1.3) !important; /* Увеличиваем масштаб на 30% */\
-                transform-origin: center !important;\
-            }\
-            \
-            /* Гарантируем, что SVG внутри занимает всю высоту */\
-            .applecation__quality-badge svg {\
-                height: 100% !important;\
-                width: auto !important;\
-                max-height: 1.4em !important;\
-            }\
-            \
-            /* Убираем лишние рамки, если они мешают размеру */\
-            .applecation__quality-badge {\
-                border: none !important;\
-                background: none !important;\
-            }\
-        </style>');
+
+
+(function () {
+    var styleId = 'flixio-mega-icons-fix';
+    // Удаляем старую версию стилей, если она была
+    $('#' + styleId).remove();
+
+    $('body').append('<style id="' + styleId + '">\
+        /* Контейнер для всех иконок в карточке */\
+        .applecation__quality-badges {\
+            display: inline-flex !important;\
+            align-items: center !important;\
+            vertical-align: middle !important;\
+            gap: 12px !important; /* Увеличили расстояние между иконками */\
+            margin-left: 12px !important;\
+            height: 2em !important;\
+        }\
+\
+        /* Базовый размер (для 7.1, 4K и прочих крупных) */\
+        .applecation__quality-badge {\
+            height: 1.8em !important; /* Еще больше высота */\
+            width: auto !important;\
+            display: block !important;\
+        }\
+\
+        /* ЭКСТРА-УВЕЛИЧЕНИЕ для проблемных иконок */\
+        .applecation__quality-badge--5-1, \
+        .applecation__quality-badge--2-0, \
+        .applecation__quality-badge--hd, \
+        .applecation__quality-badge--fhd {\
+            transform: scale(1.55) !important; /* Увеличиваем в полтора раза */\
+            transform-origin: center !important;\
+            margin: 0 5px !important; /* Добавляем "воздуха" по бокам */\
+        }\
+\
+        /* Чтобы SVG не обрезались при увеличении */\
+        .applecation__quality-badge svg {\
+            height: 100% !important;\
+            width: auto !important;\
+            overflow: visible !important;\
+        }\
+\
+        /* Исправляем цвет (делаем ярче) */\
+        .applecation__quality-badge svg path {\
+            fill: #ffffff !important;\
+            fill-opacity: 1 !important;\
+        }\
+\
+        /* Поправка для строки текста рядом с иконками */\
+        .applecation__info {\
+            font-size: 1.1em !important;\
+            line-height: 2 !important;\
+            display: flex !important;\
+            align-items: center !important;\
+            flex-wrap: wrap !important;\
+        }\
+    </style>');
+
+    // Функция форсированного обновления (на случай если Lampa перетирает стили)
+    function applyMegaSize() {
+        var badges = $('.applecation__quality-badge--5-1, .applecation__quality-badge--2-0, .applecation__quality-badge--hd, .applecation__quality-badge--fhd');
+        if (badges.length) {
+            badges.css('display', 'inline-block');
+        }
     }
 
-    // 2. Функция для "лечения" уже отрисованных иконок
-    function rescaleBadges() {
-        $('.applecation__quality-badge').each(function() {
-            var $this = $(this);
-            // Если это текстовая иконка (не SVG), подтянем шрифт
-            if ($this.text().length > 0) {
-                $this.css({
-                    'font-size': '1.2em',
-                    'font-weight': 'bold',
-                    'line-height': '1'
-                });
-            }
-        });
-    }
-
-    // Запускаем проверку каждые 2 секунды, так как Lampa перерисовывает карточки
-    setInterval(rescaleBadges, 2000);
+    setInterval(applyMegaSize, 1000);
 })();
-
