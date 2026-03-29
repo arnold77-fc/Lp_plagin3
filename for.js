@@ -7874,61 +7874,48 @@
         });
     }
 
-      function runInit() {
+
+    function runInit() {
         try {
-            // Внедряем стили для УЛЬТРА-ЖИРНЫХ и ОГРОМНЫХ иконок
-            var styleId = 'flixio-mega-bold-fix';
-            $('#' + styleId).remove();
-            $('body').append('<style id="' + styleId + '">\
-                /* Контейнер всей строки инфо */\
-                .applecation__info {\
-                    display: flex !important;\
-                    align-items: center !important;\
-                    flex-wrap: wrap !important;\
-                    line-height: 2 !important;\
-                }\
-                \
-                /* Общий контейнер группы иконок */\
-                .applecation__quality-badges {\
-                    display: inline-flex !important;\
-                    align-items: center !important;\
-                    gap: 15px !important; /* Больше отступ, так как иконки станут шире */\
-                    margin-left: 15px !important;\
-                    vertical-align: middle !important;\
-                }\
-                \
-                /* Базовый размер (для 7.1) */\
-                .applecation__quality-badge {\
-                    height: 1.8em !important;\
-                    width: auto !important;\
-                    overflow: visible !important; /* Позволяем цифрам выходить за границы */\
-                }\
-                \
-                /* ФИКС ПУСТОТЫ И МАЛЕНЬКИХ ЦИФР (5.1, 2.0, HD, FHD) */\
-                .applecation__quality-badge--5-1, \
-                .applecation__quality-badge--2-0, \
-                .applecation__quality-badge--hd, \
-                .applecation__quality-badge--fhd {\
-                    transform: scale(2.2) !important; /* Увеличиваем в 2.2 раза, чтобы убрать пустоту */\
-                    transform-origin: center !important;\
-                    margin: 0 10px !important; /* Компенсируем расширение, чтобы не налезали друг на друга */\
-                    filter: drop-shadow(0.8px 0 0 white) drop-shadow(-0.8px 0 0 white) !important; /* Доп. жирность */\
-                }\
-                \
-                /* Делаем линии SVG жирными как у 7.1 */\
-                .applecation__quality-badge svg path {\
-                    fill: #fff !important;\
-                    stroke: #fff !important;\
-                    stroke-width: 1.2px !important; /* Максимальное утолщение линий */\
-                    stroke-linejoin: round !important;\
-                }\
-                \
-                .applecation__quality-badge svg {\
-                    height: 100% !important;\
-                    width: auto !important;\
-                    overflow: visible !important;\
-                }\
-            </style>');
+            // 1. Внедряем "бронебойные" стили
+            if (!$('#flixio-mega-fix').length) {
+                $('body').append('<style id="flixio-mega-fix">\
+                    /* Расширяем контейнер */\
+                    .applecation__quality-badges {\
+                        display: inline-flex !important;\
+                        align-items: center !important;\
+                        gap: 12px !important;\
+                        height: 2.5em !important;\
+                        margin-left: 10px !important;\
+                        vertical-align: middle !important;\
+                    }\
+                    /* Делаем саму иконку огромной */\
+                    .applecation__quality-badge {\
+                        height: 2em !important;\
+                        width: auto !important;\
+                        overflow: visible !important;\
+                        display: flex !important;\
+                        align-items: center !important;\
+                    }\
+                    /* Убираем пустоту внутри SVG и увеличиваем цифры */\
+                    .applecation__quality-badge svg {\
+                        height: 140% !important; /* Выходим за границы контейнера */\
+                        width: auto !important;\
+                        transform: scale(1.8) !important; /* Увеличиваем масштаб в 1.8 раза */\
+                        transform-origin: center !important;\
+                    }\
+                    /* Делаем линии жирными как у 7.1 */\
+                    .applecation__quality-badge svg path {\
+                        stroke: #fff !important;\
+                        stroke-width: 1.5px !important; /* Принудительная жирность */\
+                        fill: #fff !important;\
+                    }\
+                    /* Отдельный фикс для HD/FHD/5.1 чтобы не слипались */\
+                    .applecation__quality-badge--5-1, .applecation__quality-badge--hd {\
+                        margin: 0 8px !important;\
+                    }\
+                </style>');
+            }
 
             initAppleTvFullCardBuiltIn();
             initAppleTvFullCardLogoRuntime();
@@ -7936,15 +7923,7 @@
             initMaxsmRatingsIntegration();
             initMarksJacRed();
             init();
-            
             window.FLIXIO_STUDIOS_LOADED = true;
-
-            // Принудительно обновляем классы каждые 1.5 сек
-            setInterval(function() {
-                $('.applecation__quality-badge--5-1, .applecation__quality-badge--2-0, .applecation__quality-badge--hd, .applecation__quality-badge--fhd')
-                    .css('display', 'inline-block');
-            }, 1500);
-
         } catch (err) {
             window.FLIXIO_STUDIOS_ERROR = (err && err.message) ? err.message : String(err);
             if (typeof console !== 'undefined' && console.error) {
@@ -7953,6 +7932,7 @@
         }
     }
 
+    // Запуск инициализации
     if (window.appready) runInit();
     else if (typeof Lampa !== 'undefined' && Lampa.Listener && Lampa.Listener.follow) {
         Lampa.Listener.follow('app', function (e) {
@@ -7961,5 +7941,14 @@
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-})(); 
-      
+
+    // 2. Силовой таймер (форсирует стили, если Lampa их сбрасывает)
+    setInterval(function() {
+        $('.applecation__quality-badge svg').each(function() {
+            if (!$(this).parent().hasClass('fixed-size')) {
+                $(this).parent().addClass('fixed-size').css('display', 'inline-flex');
+            }
+        });
+    }, 1000);
+
+})(); // Финальная скобка файла
