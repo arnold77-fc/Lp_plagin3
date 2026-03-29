@@ -2777,24 +2777,26 @@
         }
 
         // ====== Принудительное применение стилей к бейджам качества ======
-        function forceQualityBadgeStyles() {
+        
+function forceQualityBadgeStyles() {
+    // Применяем ко всем бейджам, кроме тех, что в главном баннере
     $('.card__badge').each(function() {
+        if ($(this).closest('.card').hasClass('hero-banner')) return;
+
         $(this).css({
+            'height': '1.6em',
+            'min-width': '2.8em',
             'font-weight': '900',
             'font-size': '0.9em',
-            'padding': '0.2em 0.5em',
-            'min-width': '2.5em',
-            'height': '1.4em',
+            'border': '1.5px solid white',
+            'background': 'rgba(0,0,0,0.8)',
             'display': 'inline-flex',
             'align-items': 'center',
             'justify-content': 'center',
-            'border': '1.5px solid rgba(255,255,255,0.9)',
-            'background': 'rgba(0,0,0,0.6)',
             'border-radius': '0.3em'
         });
     });
 }
-
 
         // ====== Добавление бейджей как на скриншоте ======
         
