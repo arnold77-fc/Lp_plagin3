@@ -7899,7 +7899,8 @@
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-
+    
+})();
 (function () {
     var styleId = 'flixio-bold-icons-fix';
     // Удаляем предыдущие попытки фикса, если они были
