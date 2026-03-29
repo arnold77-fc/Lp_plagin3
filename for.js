@@ -2779,29 +2779,26 @@
         // ====== Принудительное применение стилей к бейджам качества ======
         
 function forceQualityBadgeStyles() {
-    // Выбираем все типы бейджей (качество, звук, кастомные)
-    $('.card__badge--quality, .card__badge--custom, .applecation__quality-badges span').each(function() {
-        // Пропускаем только hero-баннеры, если нужно оставить их как есть
-        if ($(this).closest('.card').hasClass('hero-banner')) {
-            return;
-        }
+    // Выбираем бейджи качества и кастомные метки (звук)
+    $('.card__badge--quality, .card__badge--custom').each(function() {
+        // Пропускаем hero-баннеры (Новинки проката), чтобы там не ломать верстку
+        if ($(this).closest('.card').hasClass('hero-banner')) return;
 
         $(this).css({
             'display': 'inline-flex !important',
             'align-items': 'center !important',
             'justify-content': 'center !important',
-            'background': 'rgba(51, 153, 153, 1) !important', // Полная непрозрачность для веса
+            'background': 'rgba(51, 153, 153, 1) !important', // Делаем фон плотным
             'color': '#fff !important',
-            'font-weight': '900 !important',    // Максимальная жирность
-            'font-size': '0.9em !important',   // Увеличенный размер
+            'font-weight': '900 !important',    // Максимально жирный (как 7.1)
+            'font-size': '0.85em !important',   // Размер текста
             'line-height': '1 !important',
-            'padding': '0.2em 0.5em !important', // Плотные отступы
-            'min-width': '2.6em !important',   // Чтобы 2.0 и HD не были узкими
-            'height': '1.5em !important',      // Единая высота
-            'border-radius': '0.3em !important', // Аккуратные углы
+            'padding': '0.1em 0.4em !important',
+            'min-width': '2.8em !important',   // Убирает пустоту у 2.0 и HD
+            'height': '1.5em !important',      // Одинаковая высота для всех
+            'border-radius': '0.2em !important',
             'text-transform': 'uppercase !important',
-            'margin': '2px !important',
-            'border': '1px solid rgba(255,255,255,0.3) !important'
+            'border': '1px solid rgba(255,255,255,0.4) !important'
         });
     });
 }
