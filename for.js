@@ -7898,6 +7898,42 @@
         });
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
+ (function () {
+    var styleId = 'flixio-icons-fix';
+    if (!$('#' + styleId).length) {
+        $('body').append('<style id="' + styleId + '">\
+            /* Общий контейнер для иконок качества */\
+            .applecation__quality-badges {\
+                display: inline-flex !important;\
+                align-items: center !important;\
+                vertical-align: middle !important;\
+                gap: 6px !important;\
+                margin-left: 8px !important;\
+            }\
+            \
+            /* Базовый размер для всех иконок (ориентир на 7.1) */\
+            .applecation__quality-badge {\
+                height: 1.4em !important;\
+                width: auto !important;\
+                display: block !important;\
+            }\
+            \
+            /* Увеличение конкретно маленьких иконок */\
+            .applecation__quality-badge--5-1, \
+            .applecation__quality-badge--2-0, \
+            .applecation__quality-badge--hd, \
+            .applecation__quality-badge--fhd {\
+                transform: scale(1.25) !important; /* Увеличиваем на 25% */\
+                transform-origin: center !important;\
+                margin: 0 2px !important;\
+            }\
+            \
+            /* Уточнение для SVG внутри бейджей */\
+            .applecation__quality-badge svg {\
+                height: 100% !important;\
+                width: auto !important;\
+                vertical-align: top !important;\
+            }\
+        </style>');
     }
-
 })();
