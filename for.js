@@ -7874,43 +7874,59 @@
         });
     }
 
-        function runInit() {
+      function runInit() {
         try {
-            // Внедряем стили для жирных и крупных иконок
-            var styleId = 'flixio-bold-icons-fix';
+            // Внедряем стили для УЛЬТРА-ЖИРНЫХ и ОГРОМНЫХ иконок
+            var styleId = 'flixio-mega-bold-fix';
             $('#' + styleId).remove();
             $('body').append('<style id="' + styleId + '">\
+                /* Контейнер всей строки инфо */\
+                .applecation__info {\
+                    display: flex !important;\
+                    align-items: center !important;\
+                    flex-wrap: wrap !important;\
+                    line-height: 2 !important;\
+                }\
+                \
+                /* Общий контейнер группы иконок */\
                 .applecation__quality-badges {\
                     display: inline-flex !important;\
                     align-items: center !important;\
-                    gap: 12px !important;\
-                    height: 2.2em !important;\
+                    gap: 15px !important; /* Больше отступ, так как иконки станут шире */\
+                    margin-left: 15px !important;\
                     vertical-align: middle !important;\
                 }\
+                \
+                /* Базовый размер (для 7.1) */\
                 .applecation__quality-badge {\
                     height: 1.8em !important;\
                     width: auto !important;\
-                    display: flex !important;\
-                    align-items: center !important;\
+                    overflow: visible !important; /* Позволяем цифрам выходить за границы */\
                 }\
-                /* Увеличение и жирность для 5.1, 2.0, HD, FHD */\
+                \
+                /* ФИКС ПУСТОТЫ И МАЛЕНЬКИХ ЦИФР (5.1, 2.0, HD, FHD) */\
                 .applecation__quality-badge--5-1, \
                 .applecation__quality-badge--2-0, \
                 .applecation__quality-badge--hd, \
                 .applecation__quality-badge--fhd {\
-                    transform: scale(1.6) !important; \
+                    transform: scale(2.2) !important; /* Увеличиваем в 2.2 раза, чтобы убрать пустоту */\
                     transform-origin: center !important;\
-                    margin: 0 5px !important;\
-                    filter: drop-shadow(0.7px 0 0 white) drop-shadow(-0.7px 0 0 white) drop-shadow(0 0.7px 0 white) !important;\
+                    margin: 0 10px !important; /* Компенсируем расширение, чтобы не налезали друг на друга */\
+                    filter: drop-shadow(0.8px 0 0 white) drop-shadow(-0.8px 0 0 white) !important; /* Доп. жирность */\
                 }\
+                \
+                /* Делаем линии SVG жирными как у 7.1 */\
                 .applecation__quality-badge svg path {\
                     fill: #fff !important;\
                     stroke: #fff !important;\
-                    stroke-width: 0.8px !important; /* Делаем линии толще */\
+                    stroke-width: 1.2px !important; /* Максимальное утолщение линий */\
+                    stroke-linejoin: round !important;\
                 }\
+                \
                 .applecation__quality-badge svg {\
-                    overflow: visible !important;\
                     height: 100% !important;\
+                    width: auto !important;\
+                    overflow: visible !important;\
                 }\
             </style>');
 
@@ -7923,11 +7939,11 @@
             
             window.FLIXIO_STUDIOS_LOADED = true;
 
-            // Цикл для поддержания отображения при переходах
+            // Принудительно обновляем классы каждые 1.5 сек
             setInterval(function() {
                 $('.applecation__quality-badge--5-1, .applecation__quality-badge--2-0, .applecation__quality-badge--hd, .applecation__quality-badge--fhd')
-                    .css('display', 'inline-flex');
-            }, 1000);
+                    .css('display', 'inline-block');
+            }, 1500);
 
         } catch (err) {
             window.FLIXIO_STUDIOS_ERROR = (err && err.message) ? err.message : String(err);
@@ -7945,4 +7961,5 @@
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-})(); // Замыкание всего файла
+})(); 
+      
