@@ -2778,27 +2778,23 @@
 
         // ====== Принудительное применение стилей к бейджам качества ======
         function forceQualityBadgeStyles() {
-            $('.card__badge--quality').each(function() {
-                // Пропускаем hero-баннеры (Новинки проката)
-                if ($(this).closest('.card').hasClass('hero-banner')) {
-                    return;
-                }
-                $(this).css({
-                    'border-radius': '0 0.8em 0 0.8em !important',
-                    'bottom': '0 !important',
-                    'left': '0 !important',
-                    'background': 'rgba(51, 153, 153, 0.9) !important',
-                    'color': '#fff !important',
-                    'font-weight': 'bold !important',
-                    'text-transform': 'uppercase !important'
-                });
-            });
-        }
+    $('.card__badge').each(function() {
+        $(this).css({
+            'font-weight': '900',
+            'font-size': '0.9em',
+            'padding': '0.2em 0.5em',
+            'min-width': '2.5em',
+            'height': '1.4em',
+            'display': 'inline-flex',
+            'align-items': 'center',
+            'justify-content': 'center',
+            'border': '1.5px solid rgba(255,255,255,0.9)',
+            'background': 'rgba(0,0,0,0.6)',
+            'border-radius': '0.3em'
+        });
+    });
+}
 
-        // Применяем стили сразу и с задержкой
-        setTimeout(forceQualityBadgeStyles, 100);
-        setTimeout(forceQualityBadgeStyles, 500);
-        setTimeout(forceQualityBadgeStyles, 1000);
 
         // ====== Добавление бейджей как на скриншоте ======
         
