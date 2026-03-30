@@ -7899,48 +7899,56 @@
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-    // Исправленный код: убираем растягивание и сохраняем пропорции
+   // Увеличение содержимого внутри 5.1, 2.0, HD, Full HD
     $('body').append(`
         <style>
             .applecation__quality-badges {
                 display: inline-flex !important;
                 align-items: center !important;
                 vertical-align: middle !important;
-                margin-left: 10px !important;
-                gap: 8px !important; /* Расстояние между иконками */
+                gap: 8px !important;
                 height: 32px !important;
             }
 
+            /* Сама подложка иконки */
             .quality-badge, 
             .applecation__quality-badges div {
-                height: 24px !important;
-                width: auto !important;
-                font-size: 15px !important;
-                font-weight: 700 !important;
-                line-height: 24px !important;
+                height: 26px !important;
                 display: inline-flex !important;
                 align-items: center !important;
                 justify-content: center !important;
-                padding: 0 6px !important;
-                border-radius: 4px !important;
+                padding: 0 8px !important;
                 background: rgba(255, 255, 255, 0.15) !important;
-                color: #fff !important;
+                border-radius: 4px !important;
                 border: none !important;
+                box-sizing: border-box !important;
             }
 
-            /* Исправление для самих картинок и SVG (чтобы не растягивались) */
+            /* Увеличение ТЕКСТА внутри (для 7.1, 2.0 и текстовых HD) */
+            .quality-badge, 
+            .applecation__quality-badges div,
+            .quality-badge span {
+                font-size: 18px !important;    /* Размер как у 7.1 */
+                font-weight: 900 !important;   /* Максимально жирный */
+                color: #fff !important;
+                line-height: 1 !important;
+            }
+
+            /* Увеличение КАРТИНОК/SVG внутри (для графических 5.1, HD, Full HD) */
             .quality-badge svg, 
             .applecation__quality-badges svg,
+            .quality-badge img,
             .applecation__quality-badges img {
-                height: 18px !important;  /* Высота иконки внутри */
-                width: auto !important;    /* Ширина подбирается автоматически */
-                max-width: fit-content !important;
-                object-fit: contain !important; /* Сохраняет пропорции логотипа */
+                height: 22px !important;       /* Делаем саму иконку внутри почти на всю высоту плашки */
+                width: auto !important;
+                min-width: 20px !important;    /* Чтобы не схлопывались */
                 display: block !important;
                 margin: 0 !important;
-                border: none !important;
+                object-fit: contain !important;
+                filter: brightness(1.1) !important; /* Делает их чуть четче */
             }
         </style>
+    `);
     `);
 
 })();
