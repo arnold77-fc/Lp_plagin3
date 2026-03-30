@@ -7899,5 +7899,34 @@
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
+    // Принудительное увеличение иконок звука и качества (5.1, 2.0, HD, Full HD)
+    $('body').append(`
+        <style>
+            /* Контейнер для иконок и текста (7.1, 2.0 и т.д.) */
+            .applecation__meta-item {
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                vertical-align: middle !important;
+                background: rgba(255, 255, 255, 0.2) !important; /* Чуть ярче фон */
+                padding: 2px 8px !important;                     /* Ширина плашки */
+                border-radius: 6px !important;
+                margin-right: 8px !important;
+                font-size: 18px !important;                      /* Размер текста 7.1 */
+                font-weight: 900 !important;                      /* Жирность как у 7.1 */
+                height: 28px !important;                         /* Общая высота всех плашек */
+                color: #fff !important;
+                border: 1px solid rgba(255,255,255,0.1) !important; /* Легкая рамка для четкости */
+            }
+
+            /* Сами картинки-логотипы (5.1, HD, Full HD) */
+            .applecation__meta-item img {
+                height: 20px !important;                         /* Увеличили с 12px до 20px */
+                width: auto !important;
+                display: block !important;
+                filter: brightness(1.2) !important;              /* Делает логотипы чуть ярче */
+            }
+        </style>
+    `);
 
 })();
