@@ -7916,11 +7916,11 @@
             .quality-badge, 
             .applecation__quality-badges svg,
             .applecation__quality-badges div {
-                height: 24px !important;       /* Оптимальная высота */
+                height: 22px !important;       /* Оптимальная высота */
                 width: auto !important;
                 font-size: 17px !important;    /* Крупный текст */
-                font-weight: 900 !important;   /* Жирный шрифт */
-                line-height: 24px !important;
+                font-weight:700 !important;   /* Жирный шрифт */
+                line-height: 22px !important;
                 display: inline-flex !important;
                 align-items: center !important;
                 padding: 0 8px !important;
