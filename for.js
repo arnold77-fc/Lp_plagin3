@@ -7899,56 +7899,56 @@
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-   // Увеличение содержимого внутри 5.1, 2.0, HD, Full HD
-    $('body').append(`
-        <style>
-            .applecation__quality-badges {
-                display: inline-flex !important;
-                align-items: center !important;
-                vertical-align: middle !important;
-                gap: 8px !important;
-                height: 32px !important;
-            }
-
-            /* Сама подложка иконки */
-            .quality-badge, 
-            .applecation__quality-badges div {
-                height: 26px !important;
-                display: inline-flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                padding: 0 8px !important;
-                background: rgba(255, 255, 255, 0.15) !important;
-                border-radius: 4px !important;
-                border: none !important;
-                box-sizing: border-box !important;
-            }
-
-            /* Увеличение ТЕКСТА внутри (для 7.1, 2.0 и текстовых HD) */
-            .quality-badge, 
-            .applecation__quality-badges div,
-            .quality-badge span {
-                font-size: 18px !important;    /* Размер как у 7.1 */
-                font-weight: 900 !important;   /* Максимально жирный */
-                color: #fff !important;
-                line-height: 1 !important;
-            }
-
-            /* Увеличение КАРТИНОК/SVG внутри (для графических 5.1, HD, Full HD) */
-            .quality-badge svg, 
-            .applecation__quality-badges svg,
-            .quality-badge img,
-            .applecation__quality-badges img {
-                height: 22px !important;       /* Делаем саму иконку внутри почти на всю высоту плашки */
-                width: auto !important;
-                min-width: 20px !important;    /* Чтобы не схлопывались */
-                display: block !important;
-                margin: 0 !important;
-                object-fit: contain !important;
-                filter: brightness(1.1) !important; /* Делает их чуть четче */
-            }
-        </style>
-    `);
-    `);
+ // ПРАВИЛЬНАЯ ВСТАВКА ДЛЯ УВЕЛИЧЕНИЯ ИКОНОК
+    try {
+        var styleBlock = `
+            <style id="custom-icons-size">
+                .applecation__quality-badges {
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    gap: 8px !important;
+                    height: 35px !important;
+                }
+                /* Плашки 5.1, 2.0, 7.1, HD, 4K */
+                .quality-badge, 
+                .applecation__quality-badges div,
+                .applecation__meta-item {
+                    height: 28px !important; 
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    padding: 0 10px !important;
+                    background: rgba(255, 255, 255, 0.2) !important;
+                    border-radius: 4px !important;
+                    border: none !important;
+                    font-size: 19px !important; /* Размер текста как у 7.1 */
+                    font-weight: 900 !important; /* Жирность */
+                    color: #fff !important;
+                    line-height: 1 !important;
+                }
+                /* Картинки внутри (логотипы 5.1, HD и т.д.) */
+                .quality-badge svg, 
+                .applecation__quality-badges svg,
+                .quality-badge img,
+                .applecation__quality-badges img {
+                    height: 22px !important; /* Делаем картинку внутри крупной */
+                    width: auto !important;
+                    display: block !important;
+                    margin: 0 !important;
+                    object-fit: contain !important;
+                    border: none !important;
+                }
+            </style>`;
+        
+        if (typeof $ !== 'undefined') {
+            $('body').append(styleBlock);
+        } else {
+            var node = document.createElement('div');
+            node.innerHTML = styleBlock;
+            document.body.appendChild(node);
+        }
+    } catch (e) {
+        console.log('Icon size fix error:', e);
+    }
 
 })();
