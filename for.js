@@ -7899,32 +7899,43 @@
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-    // Принудительное увеличение иконок звука и качества (5.1, 2.0, HD, Full HD)
+    // ПРИНУДИТЕЛЬНОЕ УВЕЛИЧЕНИЕ ИКОНОК (4K, 5.1, HDR, HD)
     $('body').append(`
         <style>
-            /* Контейнер для иконок и текста (7.1, 2.0 и т.д.) */
-            .applecation__meta-item {
+            /* Контейнер для всех плашек качества */
+            .applecation__quality-badges {
                 display: inline-flex !important;
                 align-items: center !important;
-                justify-content: center !important;
                 vertical-align: middle !important;
-                background: rgba(255, 255, 255, 0.2) !important; /* Чуть ярче фон */
-                padding: 2px 8px !important;                     /* Ширина плашки */
-                border-radius: 6px !important;
-                margin-right: 8px !important;
-                font-size: 18px !important;                      /* Размер текста 7.1 */
-                font-weight: 900 !important;                      /* Жирность как у 7.1 */
-                height: 28px !important;                         /* Общая высота всех плашек */
-                color: #fff !important;
-                border: 1px solid rgba(255,255,255,0.1) !important; /* Легкая рамка для четкости */
+                margin-left: 10px !important;
+                gap: 6px !important;
+                height: 32px !important; /* Общая высота строки */
             }
 
-            /* Сами картинки-логотипы (5.1, HD, Full HD) */
-            .applecation__meta-item img {
-                height: 20px !important;                         /* Увеличили с 12px до 20px */
+            /* Сами плашки (4K, HDR, 5.1 и т.д.) */
+            .quality-badge, 
+            .applecation__quality-badges svg,
+            .applecation__quality-badges div {
+                height: 26px !important;       /* Высота самой плашки (было около 16-18) */
                 width: auto !important;
-                display: block !important;
-                filter: brightness(1.2) !important;              /* Делает логотипы чуть ярче */
+                font-size: 18px !important;    /* Крупный текст для 5.1, 7.1 */
+                font-weight: 900 !important;   /* Максимальная жирность */
+                line-height: 26px !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                padding: 0 10px !important;    /* Внутренние отступы */
+                border-radius: 4px !important;
+                background: rgba(255, 255, 255, 0.2) !important;
+                color: #fff !important;
+                border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            }
+
+            /* Исправление размера иконок внутри плашек (например, логотип HD или 4K) */
+            .quality-badge svg, 
+            .applecation__quality-badges svg {
+                height: 20px !important;       /* Размер самого значка внутри */
+                width: auto !important;
+                margin: 0 2px !important;
             }
         </style>
     `);
