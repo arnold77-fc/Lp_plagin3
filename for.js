@@ -7899,45 +7899,46 @@
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-    // Обновленный код: увеличиваем иконки и убираем двойной ободок
+    // Исправленный код: убираем растягивание и сохраняем пропорции
     $('body').append(`
         <style>
-            /* Контейнер для всех плашек качества */
             .applecation__quality-badges {
                 display: inline-flex !important;
                 align-items: center !important;
                 vertical-align: middle !important;
                 margin-left: 10px !important;
-                gap: 6px !important;
+                gap: 8px !important; /* Расстояние между иконками */
                 height: 32px !important;
             }
 
-            /* Сами плашки (4K, HDR, 5.1 и т.д.) */
             .quality-badge, 
-            .applecation__quality-badges svg,
             .applecation__quality-badges div {
-                height: 24px !important;       /* Оптимальная высота */
+                height: 24px !important;
                 width: auto !important;
-                font-size: 17px !important;    /* Крупный текст */
-                font-weight:550 !important;   /* Жирный шрифт */
+                font-size: 16px !important;
+                font-weight: 900 !important;
                 line-height: 24px !important;
                 display: inline-flex !important;
                 align-items: center !important;
-                padding: 0 6px !important;
+                justify-content: center !important;
+                padding: 0 8px !important;
                 border-radius: 4px !important;
                 background: rgba(255, 255, 255, 0.15) !important;
                 color: #fff !important;
-                border: none !important;       /* УБИРАЕМ ЛИШНИЙ ОБОДОК */
-                box-shadow: none !important;   /* Убираем тени, если они были */
+                border: none !important;
             }
 
-            /* Размер значков внутри (логотипы) */
+            /* Исправление для самих картинок и SVG (чтобы не растягивались) */
             .quality-badge svg, 
-            .applecation__quality-badges svg {
-                height: 18px !important;
-                width: auto !important;
+            .applecation__quality-badges svg,
+            .applecation__quality-badges img {
+                height: 18px !important;  /* Высота иконки внутри */
+                width: auto !important;    /* Ширина подбирается автоматически */
+                max-width: fit-content !important;
+                object-fit: contain !important; /* Сохраняет пропорции логотипа */
+                display: block !important;
                 margin: 0 !important;
-                border: none !important;       /* Убираем ободок у SVG */
+                border: none !important;
             }
         </style>
     `);
