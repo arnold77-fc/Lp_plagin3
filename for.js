@@ -7913,16 +7913,16 @@
                 .quality-badge, 
                 .applecation__quality-badges div,
                 .applecation__meta-item {
-                    height: 28px !important; 
+                    height: 24px !important; 
                     display: inline-flex !important;
                     align-items: center !important;
                     justify-content: center !important;
-                    padding: 0 10px !important;
+                    padding: 0 6px !important;
                     background: rgba(255, 255, 255, 0.2) !important;
                     border-radius: 4px !important;
                     border: none !important;
-                    font-size: 19px !important; /* Размер текста как у 7.1 */
-                    font-weight: 900 !important; /* Жирность */
+                    font-size: 15px !important; /* Размер текста как у 7.1 */
+                    font-weight:700!important; /* Жирность */
                     color: #fff !important;
                     line-height: 1 !important;
                 }
