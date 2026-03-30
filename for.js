@@ -7920,7 +7920,7 @@
                 width: auto !important;
                 font-size: 18px !important;    /* Крупный текст для 5.1, 7.1 */
                 font-weight: 900 !important;   /* Максимальная жирность */
-                line-height: 26px !important;
+                line-height: 24px !important;
                 display: inline-flex !important;
                 align-items: center !important;
                 padding: 0 10px !important;    /* Внутренние отступы */
