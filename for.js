@@ -7923,7 +7923,7 @@
                 line-height: 24px !important;
                 display: inline-flex !important;
                 align-items: center !important;
-                padding: 0 8px !important;
+                padding: 0 6px !important;
                 border-radius: 4px !important;
                 background: rgba(255, 255, 255, 0.15) !important;
                 color: #fff !important;
