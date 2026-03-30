@@ -7899,7 +7899,7 @@
     } else {
         window.FLIXIO_STUDIOS_ERROR = 'Lampa.Listener not found';
     }
-    // ПРИНУДИТЕЛЬНОЕ УВЕЛИЧЕНИЕ ИКОНОК (4K, 5.1, HDR, HD)
+    // Обновленный код: увеличиваем иконки и убираем двойной ободок
     $('body').append(`
         <style>
             /* Контейнер для всех плашек качества */
@@ -7909,33 +7909,35 @@
                 vertical-align: middle !important;
                 margin-left: 10px !important;
                 gap: 6px !important;
-                height: 32px !important; /* Общая высота строки */
+                height: 32px !important;
             }
 
             /* Сами плашки (4K, HDR, 5.1 и т.д.) */
             .quality-badge, 
             .applecation__quality-badges svg,
             .applecation__quality-badges div {
-                height: 22px !important;       /* Высота самой плашки (было около 16-18) */
+                height: 24px !important;       /* Оптимальная высота */
                 width: auto !important;
-                font-size: 18px !important;    /* Крупный текст для 5.1, 7.1 */
-                font-weight: 700 !important;   /* Максимальная жирность */
-                line-height: 22px !important;
+                font-size: 17px !important;    /* Крупный текст */
+                font-weight: 900 !important;   /* Жирный шрифт */
+                line-height: 24px !important;
                 display: inline-flex !important;
                 align-items: center !important;
-                padding: 0 10px !important;    /* Внутренние отступы */
+                padding: 0 8px !important;
                 border-radius: 4px !important;
-                background: rgba(255, 255, 255, 0.2) !important;
+                background: rgba(255, 255, 255, 0.15) !important;
                 color: #fff !important;
-                border: 1px solid rgba(255, 255, 255, 0.3) !important;
+                border: none !important;       /* УБИРАЕМ ЛИШНИЙ ОБОДОК */
+                box-shadow: none !important;   /* Убираем тени, если они были */
             }
 
-            /* Исправление размера иконок внутри плашек (например, логотип HD или 4K) */
+            /* Размер значков внутри (логотипы) */
             .quality-badge svg, 
             .applecation__quality-badges svg {
-                height: 20px !important;       /* Размер самого значка внутри */
+                height: 18px !important;
                 width: auto !important;
-                margin: 0 2px !important;
+                margin: 0 !important;
+                border: none !important;       /* Убираем ободок у SVG */
             }
         </style>
     `);
