@@ -7916,7 +7916,7 @@
             .quality-badge, 
             .applecation__quality-badges svg,
             .applecation__quality-badges div {
-                height: 26px !important;       /* Высота самой плашки (было около 16-18) */
+                height: 24px !important;       /* Высота самой плашки (было около 16-18) */
                 width: auto !important;
                 font-size: 18px !important;    /* Крупный текст для 5.1, 7.1 */
                 font-weight: 900 !important;   /* Максимальная жирность */
