@@ -7907,13 +7907,13 @@
                     display: inline-flex !important;
                     align-items: center !important;
                     gap:6px !important;
-                    height: 24 !important;
+                    height: 18 !important;
                 }
                 /* Плашки 5.1, 2.0, 7.1, HD, 4K */
                 .quality-badge, 
                 .applecation__quality-badges div,
                 .applecation__meta-item {
-                    height: 24px !important; 
+                    height: 18px !important; 
                     display: inline-flex !important;
                     align-items: center !important;
                     justify-content: center !important;
