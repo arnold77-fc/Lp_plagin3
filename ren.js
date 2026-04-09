@@ -1,114 +1,127 @@
+
 (function () {
     'use strict';
 
-    // 1. СТИЛИ (Обязательно для видимости плашек)
-    var styleBlock = `
+    // 1. Уникальные настройки и локализация
+    var PLUGIN_NAME = 'flixio_quality_rating';
+    var LANG = (Lampa.Storage.get('language', 'ru') || 'ru').toLowerCase();
+    
+    var Labels = {
+        title: { ru: 'Рейтинг и качество', uk: 'Рейтинг та якість', en: 'Rating & Quality' }
+    };
+
+    function msg(key) {
+        return Labels.title[LANG] || Labels.title['ru'];
+    }
+
+    // 2. Стили (извлечены из вашего кода)
+    var styles = `
         <style>
-            .quality-badge {
-                display: inline-flex !important;
-                align-items: center !important;
-                padding: 4px 8px !important;
-                margin-right: 6px !important;
-                background: rgba(255, 255, 255, 0.15) !important;
-                border-radius: 5px !important;
-                font-size: 13px !important;
-                font-weight: bold !important;
-                color: #fff !important;
+            .flix-rating-line { 
+                display: flex; 
+                flex-wrap: wrap; 
+                gap: 10px; 
+                margin: 10px 0; 
+                align-items: center;
+            }
+            .flix-badge {
+                padding: 4px 8px;
+                border-radius: 4px;
+                background: rgba(255,255,255,0.2);
+                color: #fff;
+                font-size: 12px;
+                font-weight: bold;
                 text-transform: uppercase;
             }
-            .badge--4k { background: #e50914 !important; } /* Красный для 4K */
-            .badge--fhd { background: #339999 !important; } /* Бирюзовый для 1080p */
-            .badge--ua { background: #0057b7 !important; color: #ffd700 !important; } /* Сине-желтый для UA */
-            
-            .plugin-ratings {
-                display: flex;
-                gap: 15px;
-                margin: 10px 0;
-                font-size: 16px;
-                font-weight: 500;
-            }
-            .rating-item { display: flex; align-items: center; gap: 5px; }
-            .rating-kp { color: #f50; }
-            .rating-imdb { color: #f5c518; }
+            .flix-badge--4k { background: #e50914 !important; }
+            .flix-badge--fhd { background: #339999 !important; }
+            .flix-badge--ua { background: #0057b7 !important; color: #ffd700 !important; border: 1px solid #ffd700; }
+            .flix-kp { color: #f50; font-weight: bold; font-size: 16px; }
+            .flix-imdb { color: #f5c518; font-weight: bold; font-size: 16px; }
         </style>
     `;
 
-    // 2. ЛОГИКА ОПРЕДЕЛЕНИЯ КАЧЕСТВА (Извлечено из вашего кода)
-    function getQualityInfo(movie) {
-        var title = (movie.title || movie.name || '').toLowerCase();
-        var quality = 'SD';
+    // 3. Логика получения данных
+    function getQuality(title) {
+        var t = (title || '').toLowerCase();
+        if (t.indexOf('4k') > -1 || t.indexOf('2160') > -1) return '4K';
+        if (t.indexOf('1080') > -1 || t.indexOf('fhd') > -1) return 'FHD';
+        if (t.indexOf('720') > -1 || t.indexOf('hd') > -1) return 'HD';
+        return '';
+    }
+
+    function isUa(title) {
+        var t = (title || '').toLowerCase();
+        return t.indexOf('ukr') > -1 || t.indexOf('укр') > -1 || t.indexOf('ua') > -1;
+    }
+
+    // 4. Основная функция отрисовки
+    function injectData(render, movie) {
+        // Ищем место для вставки (совместимость с разными версиями Lampa)
+        var target = render.find('.full-start-new__rate-line, .full-start__rate');
+        if (!target.length) return;
+
+        // Чтобы не дублировать при повторном открытии
+        if (render.find('.flix-rating-line').length) return;
+
+        var container = $('<div class="flix-rating-line"></div>');
         
-        if (title.indexOf('4k') >= 0 || title.indexOf('2160') >= 0 || title.indexOf('uhd') >= 0) quality = '4K';
-        else if (title.indexOf('1080') >= 0 || title.indexOf('fhd') >= 0) quality = 'FHD';
-        else if (title.indexOf('720') >= 0 || title.indexOf('hd') >= 0) quality = 'HD';
+        // Качество
+        var q = getQuality(movie.title || movie.name);
+        if (q) {
+            var qCls = (q === '4K') ? 'flix-badge--4k' : 'flix-badge--fhd';
+            container.append('<div class="flix-badge '+qCls+'">'+q+'</div>');
+        }
 
-        return {
-            label: quality,
-            isUa: (title.indexOf('ukr') >= 0 || title.indexOf('укр') >= 0 || title.indexOf('ua') >= 0)
-        };
+        // Озвучка UA
+        if (isUa(movie.title || movie.name)) {
+            container.append('<div class="flix-badge flix-badge--ua">UA</div>');
+        }
+
+        target.after(container);
+
+        // Запрос рейтинга Кинопоиск (Ваш API ключ из кода)
+        var kp_api = '2ed29580-9942-45fd-96d5-6b3a3297b69c';
+        var year = (movie.release_date || movie.first_air_date || '').split('-')[0];
+        var query = encodeURIComponent(movie.title || movie.name);
+
+        fetch('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword=' + query, {
+            headers: { 'X-API-KEY': kp_api }
+        })
+        .then(r => r.json())
+        .then(data => {
+            var found = data.films ? data.films.find(f => f.year == year) : null;
+            if (found && found.rating && found.rating !== 'null') {
+                container.append('<div class="flix-kp">KP: ' + found.rating + '</div>');
+            }
+        }).catch(e => {});
     }
 
-    // 3. ПОЛУЧЕНИЕ РЕЙТИНГОВ (Кинопоиск / IMDB)
-    function loadRatings(movie, container) {
-        var kp_key = '2ed29580-9942-45fd-96d5-6b3a3297b69c'; // Ваш ключ из кода
-        var title = movie.title || movie.name;
-        var year = (movie.release_date || movie.first_air_date || '0000').substring(0, 4);
+    // 5. Регистрация в Lampa
+    function init() {
+        $('body').append(styles);
 
-        var url = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword=' + encodeURIComponent(title);
-
-        fetch(url, { headers: { 'X-API-KEY': kp_key } })
-            .then(r => r.json())
-            .then(data => {
-                var match = data.films ? data.films.find(f => f.year == year) : null;
-                if (match && match.rating && match.rating !== 'null') {
-                    var html = `<div class="plugin-ratings">
-                        <span class="rating-item rating-kp">KP: ${match.rating}</span>
-                        ${movie.vote_average ? `<span class="rating-item">TMDB: ${movie.vote_average.toFixed(1)}</span>` : ''}
-                    </div>`;
-                    container.prepend(html);
-                }
-            }).catch(e => console.log('Rating error', e));
-    }
-
-    // 4. ИНИЦИАЛИЗАЦИЯ И ИНЪЕКЦИЯ
-    function startPlugin() {
-        $('body').append(styleBlock);
-
-        // Слушаем открытие карточки фильма
         Lampa.Listener.follow('full', function (e) {
             if (e.type === 'complite') {
-                var render = e.object.activity.render();
-                var movie = e.data.movie;
-
-                // Создаем контейнер в разделе инфо (там где обычно пусто)
-                var container = render.find('.full-start-new__rate-line'); 
-                if (!container.length) container = render.find('.full-start__rate');
-
-                // Очищаем старое (на всякий случай) и добавляем новое
-                var info = getQualityInfo(movie);
-                var badgesHtml = '<div class="plugin-quality-badges" style="margin-bottom: 10px;">';
-                
-                if (info.label !== 'SD') {
-                    var cls = info.label === '4K' ? 'badge--4k' : 'badge--fhd';
-                    badgesHtml += `<span class="quality-badge ${cls}">${info.label}</span>`;
-                }
-                
-                if (info.isUa) {
-                    badgesHtml += `<span class="quality-badge badge--ua">UA Озвучка</span>`;
-                }
-                badgesHtml += '</div>';
-
-                container.after(badgesHtml);
-                loadRatings(movie, container);
+                injectData(e.object.activity.render(), e.data.movie);
             }
         });
+
+        // Добавляем пункт в настройки, чтобы он не пропадал
+        if (Lampa.SettingsApi) {
+            Lampa.SettingsApi.addComponent({
+                component: PLUGIN_NAME,
+                name: msg('title'),
+                icon: '<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="white"/></svg>'
+            });
+        }
     }
 
-    // Запуск при готовности Lampa
-    if (window.appready) startPlugin();
+    if (window.appready) init();
     else {
         Lampa.Listener.follow('app', function (e) {
-            if (e.type === 'ready') startPlugin();
+            if (e.type === 'ready') init();
         });
     }
+
 })();
