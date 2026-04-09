@@ -1,119 +1,97 @@
 (function () {
     'use strict';
 
-    /**
-     * Плагин Ratings Gold для Lampa
-     * Собрано на основе интеграции maxsmRatings и логики Лихтар 4.0
-     */
-
-    // =================================================================
-    // CONFIGURATION & CONSTANTS
-    // =================================================================
-    
-    // Ключи API (используются те, что были в коде)
-    var OMDB_API_KEYS = ['73ff4450']; 
+    // 1. Константы и API ключи из файла
+    var OMDB_API_KEYS = ['73ff4450'];
     var KP_API_KEYS = ['5178ab83-699c-4422-937e-f8a759f872ef'];
-    
-    var CACHE_TIME = 3 * 24 * 60 * 60 * 1000; // Кэш на 3 дня
-    var WEIGHTS = { imdb: 0.35, tmdb: 0.15, kp: 0.20, mc: 0.15, rt: 0.15 }; // Веса
+    var WEIGHTS = { imdb: 0.35, tmdb: 0.15, kp: 0.20, mc: 0.15, rt: 0.15 };
 
-    var AGE_RATINGS = { 
-        'G': '3+', 'PG': '6+', 'PG-13': '13+', 'R': '17+', 'NC-17': '18+', 
-        'TV-Y': '0+', 'TV-Y7': '7+', 'TV-G': '3+', 'TV-PG': '6+', 'TV-14': '14+', 'TV-MA': '17+' 
-    };
+    // 2. SVG Иконка для меню
+    var icon_star = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" fill="currentColor"/></svg>';
 
-    // SVG Иконки
-    var imdb_svg = '<svg style="width:1.4em; height:1.4em; vertical-align:middle;" viewBox="0 0 122.88 122.88"><path fill="#F5C518" d="M18.43,0h86.02c10.18,0,18.43,8.25,18.43,18.43v86.02c0,10.18-8.25,18.43-18.43,18.43H18.43 C8.25,122.88,0,114.63,0,104.45l0-86.02C0,8.25,8.25,0,18.43,0z"/></svg>';
-    var star_svg = '<svg style="width:1.4em; height:1.4em; vertical-align:middle;" viewBox="10 10 44 44" fill="none"><path d="M31.4517 11.3659L40.2946 22.8568L54.0403 26.5435L45.8445 38.5045L46.5858 52.7168L32.6776 48.6182L19.39 53.7151L18.9901 39.221L10.0366 28.1589L23.6977 23.2996L31.4517 11.3659Z" fill="#FFDF6D"/></svg>';
+    // 3. Функция создания настроек
+    function setupSettings() {
+        // Добавляем новый пункт в главный список настроек
+        Lampa.Settings.add({
+            title: 'Рейтинг и качество',
+            type: 'book',
+            icon: icon_star,
+            name: 'maxsm_ratings_settings'
+        });
 
-    // =================================================================
-    // STYLES
-    // =================================================================
-    var style = `
-        <style id="ratings_gold_styles">
-            .applecation__ratings {
-                display: flex;
-                align-items: center;
-                gap: 1.2em;
-                margin-top: 1.2em;
-                opacity: 0;
-                transform: translateY(15px);
-                transition: opacity .4s ease-out, transform .4s ease-out;
-            }
-            .applecation__ratings.show {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            .rating-item {
-                display: flex;
-                align-items: center;
-                gap: 0.5em;
-                font-size: 1.2em;
-                font-weight: bold;
-            }
-            .rate--green { color: #4CAF50; }
-            .rate--lime { color: #CDDC39; }
-            .rate--orange { color: #FF9800; }
-            .rate--red { color: #F44336; }
-        </style>
-    `;
+        // Создаем содержимое этого пункта
+        Lampa.Settings.bind('maxsm_ratings_settings', function (item) {
+            item.append(Lampa.Template.get('settings_list_top', {
+                title: 'Настройки рейтингов',
+                descr: 'Управление отображением оценок и качества контента'
+            }));
 
-    // =================================================================
-    // LOGIC & INTEGRATION
-    // =================================================================
-    
-    function getRatingClass(rating) {
-        var r = parseFloat(rating);
-        if (r >= 8.5) return 'rate--green';
-        if (r >= 7.0) return 'rate--lime';
-        if (r >= 5.0) return 'rate--orange';
-        return 'rate--red';
+            // Переключатель отображения среднего рейтинга
+            var show_avg = Lampa.Template.get('settings_field', {
+                name: 'ratings_show_avg',
+                title: 'Средний рейтинг',
+                descr: 'Показывать вычисленный средний балл'
+            });
+            show_avg.append(Lampa.Template.get('settings_field_checkbox', { name: 'ratings_show_avg', value: true }));
+            item.append(show_avg);
+
+            // Переключатель рейтинга Кинопоиска
+            var show_kp = Lampa.Template.get('settings_field', {
+                name: 'ratings_show_kp',
+                title: 'Рейтинг Кинопоиск',
+                descr: 'Отображать данные из KP API'
+            });
+            show_kp.append(Lampa.Template.get('settings_field_checkbox', { name: 'ratings_show_kp', value: true }));
+            item.append(show_kp);
+
+            // Поле для ключа API (если пользователь захочет свой)
+            var kp_key = Lampa.Template.get('settings_field', {
+                name: 'ratings_kp_key',
+                title: 'Ключ Кинопоиск (опционально)',
+                descr: 'Ваш личный токен для API Кинопоиска'
+            });
+            kp_key.append('<div class="settings-param__value">Изменить</div>');
+            kp_key.on('hover:enter', function() {
+                Lampa.Input.edit({
+                    value: Lampa.Storage.get('ratings_kp_key', ''),
+                    free: true
+                }, function(new_value) {
+                    Lampa.Storage.set('ratings_kp_key', new_value);
+                    Lampa.Noty.show('Сохранено');
+                });
+            });
+            item.append(kp_key);
+        });
     }
 
-    function initPlugin() {
-        $('body').append(style);
-
-        // Слушаем событие открытия карточки фильма
+    // 4. Логика отображения в карточке
+    function initRatingsInCard() {
         Lampa.Listener.follow('full', function (e) {
             if (e.type !== 'complite') return;
             
             var render = e.object.activity.render();
-            var movie = e.data.movie;
+            var ratingsCont = $('<div class="applecation__ratings show"></div>');
             
-            // Создаем контейнер для рейтингов
-            var ratingsCont = $('<div class="applecation__ratings"></div>');
+            // Если включено в настройках — показываем
+            if (Lampa.Storage.field('ratings_show_avg')) {
+                var val = e.data.movie.vote_average || '0.0';
+                ratingsCont.append('<div class="rating-item" style="color:#FFDF6D; font-weight:bold; margin-right:15px;">★ '+val+'</div>');
+            }
+            
             render.find('.full-start__details').after(ratingsCont);
-
-            // Имитация получения данных (логика fetchOmdbRatings/fetchKpRatings из кода)
-            // В полноценном плагине здесь идут асинхронные запросы к API
-            var mockRatings = {
-                imdb: movie.vote_average || '0.0',
-                kp: '—',
-                tmdb: movie.vote_average || '0.0'
-            };
-
-            // Вывод рейтингов
-            var html = `
-                <div class="rating-item">${star_svg} <span class="${getRatingClass(mockRatings.tmdb)}">${mockRatings.tmdb}</span></div>
-                <div class="rating-item">${imdb_svg} <span>${mockRatings.imdb}</span></div>
-            `;
-            
-            ratingsCont.html(html);
-            
-            // Плавное появление через небольшую задержку
-            setTimeout(function() {
-                ratingsCont.addClass('show');
-            }, 100);
         });
     }
 
-    // Запуск при готовности Lampa
-    if (window.appready) initPlugin();
-    else {
-        Lampa.Listener.follow('app', function (e) {
-            if (e.type === 'ready') initPlugin();
-        });
+    // 5. Запуск
+    function startPlugin() {
+        if (window.ratings_plugin_loaded) return;
+        window.ratings_plugin_loaded = true;
+
+        setupSettings();
+        initRatingsInCard();
     }
+
+    if (window.appready) startPlugin();
+    else Lampa.Listener.follow('app', function (e) { if (e.type === 'ready') startPlugin(); });
 
 })();
-
