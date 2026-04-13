@@ -284,11 +284,19 @@
                 if (hasStudioMoreBtn) studiosContainer.append(createHideButton(studiosLimit, studiosContainer));
                 container.append(studiosContainer);
             }
+            
             if (container.children().length > 0) {
-                // ИЗМЕНЕНИЕ: Вставка сразу после жанров и времени
-                var details = $('.full-start-new__details, .full-start__details', render);
-                if (details.length) networksLine.insertAfter(details);
-                else $('.items-line', render).eq(0).prepend(networksLine);
+                // ИЗМЕНЕНИЕ: Вставляем сразу ПОСЛЕ названия фильма
+                var title = $('.full-start-new__title, .full-start__title', render);
+                
+                if (title.length) {
+                    networksLine.insertAfter(title);
+                } else {
+                    // Если название не найдено (старый интерфейс), используем детали
+                    var details = $('.full-start-new__details, .full-start__details', render);
+                    if (details.length) networksLine.insertAfter(details);
+                    else $('.items-line', render).eq(0).prepend(networksLine);
+                }
 
                 if (hasPlatforms && hasStudios && separator && platformsContainer && studiosContainer) {
                     var eventName = 'resize.tmdbnet_' + Date.now();
